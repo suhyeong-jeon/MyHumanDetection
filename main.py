@@ -8,6 +8,7 @@ from ultralytics import YOLO
 import sys
 from datetime import datetime
 import os
+import shutil
 
 class MyWidget(QWidget):
 
@@ -21,7 +22,7 @@ class MyWidget(QWidget):
         self.model = YOLO('./best.pt')
         self.CONFIDENCE_THRESHOLD = 0.7
         self.txt_directory = './detection_record'
-        self. video_default_directory = './videos'
+        self. video_default_directory = './human_detection_result'
 
         self.flag = 0
         self.fourcc = cv2.VideoWriter_fourcc(*'XVID')
@@ -34,6 +35,8 @@ class MyWidget(QWidget):
         font_title.setBold(True)
         font_middle.setPointSize(middle_text_size)
         font_middle.setBold(True)
+
+
 
         # 제목
         self.title = QLabel("Human Detection Program", alignment=QtCore.Qt.AlignCenter)
@@ -48,9 +51,13 @@ class MyWidget(QWidget):
         self.save_dir = QLabel("경로가 선택되지 않았습니다.")
         self.save_dir_button = QPushButton("저장 경로 선택")
 
+        self.previous_video_directory = ""
+        self.previous_txt_directory = ""
+
         # 카메라 선택
         self.choose_camera_label = QLabel("카메라 선택")
         self.choose_camera_label.setFont(font_middle)
+
 
         self.webcamComboBox = QComboBox(self)
         self.webcamComboBox.currentIndexChanged.connect(self.change_webcam)
@@ -69,9 +76,7 @@ class MyWidget(QWidget):
 
 
         # 녹화 중단
-        self.record_stop = QPushButton("녹화 저장 후 녹화 실행")
-
-
+        self.record_stop = QPushButton("녹화 저장 후 녹화 재실행")
 
 
         # 레이아웃 설정
@@ -99,10 +104,12 @@ class MyWidget(QWidget):
         self.layout.addWidget(self.record_stop)
 
 
+
         self.save_dir_button.clicked.connect(self.show_file_dialog)
         self.record_stop.clicked.connect(self.record_stop_func)
 
 
+    # 저장 경로 바꿨을 때 바뀐 저장 경로로 동영상 저장하는 로직 만들어야함
     def show_file_dialog(self):
         dialog = QFileDialog(self)
         dialog.setFileMode(QFileDialog.Directory)
@@ -130,14 +137,7 @@ class MyWidget(QWidget):
 
     # 여기서 웹캠을 띄움과 동시에 모델로 object detection함
     def update_frame(self):
-        if str(self.save_dir.text()) == "경로가 선택되지 않았습니다.":
-            video_directory = self.video_default_directory
-        else:
-            video_directory = str(self.save_dir.text())
-
-
-        ret, frame = self.cap.read()
-
+        
         # 시간 설정
         current_time = datetime.now()
         formatted_time = current_time.strftime("%Y-%m-%d %H:%M:%S")
@@ -145,10 +145,32 @@ class MyWidget(QWidget):
         save_time = current_time.strftime("%H_%M_%S")
         self.today_date.setText(str(formatted_time))
 
-        os.makedirs(f'{self.txt_directory}/{current_time.year}_{current_time.month}_{current_time.day}', exist_ok=True)
-        os.makedirs(f'./videos/{current_time.year}_{current_time.month}_{current_time.day}', exist_ok=True)
-        txt_file_path = f'{self.txt_directory}/{current_time.year}_{current_time.month}_{current_time.day}/{current_time.year}_{current_time.month}_{current_time.day}.txt'
+
+        if str(self.save_dir.text()) == "경로가 선택되지 않았습니다.":
+            # 이거 빨간 글씨로 굵게 바꾸기
+            self.record_stop.setText("저장 경로를 먼저 선택하세요")
+            self.record_stop.setStyleSheet("Color : red")
+            self.record_stop.setDisabled(True)
+            return # 저장 경로가 설정되지 않았다면 캠 동작 x
+            save_directory = self.video_default_directory
+        else:
+            save_directory = f'{str(self.save_dir.text())}/human_detection_result'
+            self.record_stop.setText("녹화 저장 후 녹화 재실행")
+
+
+
+        ret, frame = self.cap.read()
+
+        txt_directory = f'{save_directory}/detection_record'
+        video_directory = f'{save_directory}/videos'
+
+
+
+        os.makedirs(f'{txt_directory}/{current_time.year}_{current_time.month}_{current_time.day}', exist_ok=True)
+        os.makedirs(f'{video_directory}/{current_time.year}_{current_time.month}_{current_time.day}', exist_ok=True)
+        txt_file_path = f'{txt_directory}/{current_time.year}_{current_time.month}_{current_time.day}/{current_time.year}_{current_time.month}_{current_time.day}.txt'
         video_file_save_date = f'{current_time.year}_{current_time.month}_{current_time.day}'
+
 
 
 
@@ -165,6 +187,7 @@ class MyWidget(QWidget):
             if self.flag == 0:
                 self.video = cv2.VideoWriter(f"{video_directory}/{video_file_save_date}/{str(current_time.year)}_{str(current_time.month)}_{str(current_time.day)}_start_{save_time}.avi",
                                              self.fourcc, 10.0, (rgb_frame.shape[1], rgb_frame.shape[0]))
+                self.previous_video_directory = f"{video_directory}/{video_file_save_date}/{str(current_time.year)}_{str(current_time.month)}_{str(current_time.day)}_start_{save_time}.avi"
                 self.flag = 1
 
 
@@ -181,6 +204,7 @@ class MyWidget(QWidget):
                     cv2.rectangle(rgb_frame, (xmin, ymin), (xmax, ymax), (0, 0, 255), 2)
 
                     if os.path.exists(txt_file_path):
+                        self.previous_txt_directory = txt_file_path
                         with open(txt_file_path, 'a') as file:
                             file.write(f"{current_time.hour}_{current_time.minute}_{current_time.second} : {len(detection)} people detected\n")
                     else:
