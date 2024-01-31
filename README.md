@@ -1,7 +1,9 @@
+## Model
+
+#### used yolov8n.pt
 
 
 ## How to use
-### Requirements
 
 #### 1. Clone this repository.
     git clone https://github.com/suhyeong-jeon/MyHumanDetection.git
