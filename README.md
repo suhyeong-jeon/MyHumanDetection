@@ -3,7 +3,7 @@
 * Used `yolov8n.pt`
 * Training Dataset : `Human Dataset`
 
-* [Dataset Download Link](https://www.kaggle.com/datasets/fareselmenshawii/human-dataset)
+[Dataset Download Link](https://www.kaggle.com/datasets/fareselmenshawii/human-dataset)
 
 ## How to use
 
