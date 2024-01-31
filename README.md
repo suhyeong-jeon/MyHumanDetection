@@ -10,3 +10,7 @@
     conda list --file requirements.txt
 
 #### 3. Execute the main.py
+
+#### 4. Select the save directory path
+<p align="center"><img src="https://github.com/suhyeong-jeon/MyHumanDetection/assets/70623959/65312ce8-336c-4881-8ad1-75fb63738b15" width="300px" height="300px"></p>
+
