@@ -1,6 +1,6 @@
 ## Model
 
-#### used <mark>yolov8n.pt</mark>
+used <mark>yolov8n.pt</mark>
 
 
 ## How to use
