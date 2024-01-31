@@ -1,6 +1,6 @@
 ## About The Model
 
-used 'yolov8n.pt'
+used `yolov8n.pt`
 
 
 ## How to use
