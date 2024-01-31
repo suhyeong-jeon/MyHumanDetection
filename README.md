@@ -1,7 +1,7 @@
 ## About The Model
 
 * Used `yolov8n.pt`
-* Training Dataset : `Human Dataset` [Download Link]<https://www.kaggle.com/datasets/fareselmenshawii/human-dataset>
+* Training Dataset : `Human Dataset` [Download Link](https://www.kaggle.com/datasets/fareselmenshawii/human-dataset)
 
 ## How to use
 
