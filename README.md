@@ -1,6 +1,6 @@
-## Model
+## About The Model
 
-used <mark>yolov8n.pt</mark>
+used 'yolov8n.pt'
 
 
 ## How to use
