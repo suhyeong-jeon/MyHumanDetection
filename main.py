@@ -206,7 +206,7 @@ class MyWidget(QWidget):
                     if os.path.exists(txt_file_path):
                         self.previous_txt_directory = txt_file_path
                         with open(txt_file_path, 'a') as file:
-                            file.write(f"{current_time.hour}_{current_time.minute}_{current_time.second} : {len(detection)} people detected\n")
+                            file.write(f"{current_time.hour}_{current_time.minute}_{current_time.second}_{current_time.microsecond} : {len(detection)} people detected\n")
                     else:
                         with open(txt_file_path, 'w') as file:
                             file.write(f"{current_time.hour}_{current_time.minute}_{current_time.second} : {len(detection)} people detected\n")
