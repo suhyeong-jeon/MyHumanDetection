@@ -16,7 +16,11 @@
 #### 3. Execute the main.py
 
 #### 4. Select the save directory path
-<p align="center"><img src="https://github.com/suhyeong-jeon/MyHumanDetection/assets/70623959/65312ce8-336c-4881-8ad1-75fb63738b15" width="500px" height="200px"></p>
+<p align="center"><img src="https://github.com/suhyeong-jeon/MyHumanDetection/assets/70623959/65312ce8-336c-4881-8ad1-75fb63738b15" width="500px" height="450px"></p>
 
 #### 5. If the model detects something, the time the object detected is recorded in 
     save directory path/detection_record/date/date.txt
+
+## Result
+
+<p align="center"><img src="https://github.com/suhyeong-jeon/MyHumanDetection/assets/70623959/3df6bcd3-e31b-4f16-a659-81828fd2b5d3" width="500px" height="450px"></p>
